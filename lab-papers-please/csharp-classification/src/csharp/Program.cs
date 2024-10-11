@@ -69,16 +69,5 @@ namespace Csharp
         }
     }
 
-    public class Universe
-    {
-        public string Name {get; set;}
-        public List<JsonNode> Individuals {get; set;} 
-
-        public Universe(string name, List<JsonNode> individuals)
-        {
-            Name = name;
-            Individuals = individuals;
-        }
-    }
 }
 
