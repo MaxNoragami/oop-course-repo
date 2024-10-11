@@ -11,10 +11,10 @@ namespace Csharp
             var input = new Input();
             input.SetInputFile("test-input.json");
 
-            var starWars = new Universe("starWars", new List<JsonNode>());
-            var hitchHiker = new Universe("hitchHiker", new List<JsonNode>());
-            var rings = new Universe("rings", new List<JsonNode>());
-            var marvel = new Universe("marvel", new List<JsonNode>());
+            string[] universeName = {"starWars", "hitchHiker", "rings", "marvel"};
+            Dictionary<string, Universe> universes = new Dictionary<string, Universe>();
+            foreach(string universe in universeName) universes[universe] = new Universe(universe, new List<JsonNode>());
+
 
             var data = input.GetData();
 
@@ -28,22 +28,22 @@ namespace Csharp
                     {
                         case "1":
                         {
-                            starWars.Individuals.Add(entry);
+                            universes["starWars"].Individuals.Add(entry);
                             break;
                         }
                         case "2":
                         {
-                            hitchHiker.Individuals.Add(entry);
+                            universes["hitchHiker"].Individuals.Add(entry);
                             break;
                         }
                         case "3":
                         {
-                            rings.Individuals.Add(entry);
+                            universes["rings"].Individuals.Add(entry);
                             break;
                         }
                         case "4":
                         {
-                            marvel.Individuals.Add(entry);
+                            universes["marvel"].Individuals.Add(entry);
                             break;
                         }
                     }
@@ -57,10 +57,10 @@ namespace Csharp
 
             string outputDirectory = Path.Combine(input.BaseDir, "..", "..", "..", "..", "resources", "output");
           
-            File.WriteAllText(Path.Combine(outputDirectory, "starwars.json"), JsonSerializer.Serialize(starWars, options));
-            File.WriteAllText(Path.Combine(outputDirectory, "hitchhiker.json"), JsonSerializer.Serialize(hitchHiker, options));
-            File.WriteAllText(Path.Combine(outputDirectory, "rings.json"), JsonSerializer.Serialize(rings, options));
-            File.WriteAllText(Path.Combine(outputDirectory, "marvel.json"), JsonSerializer.Serialize(marvel, options));
+            File.WriteAllText(Path.Combine(outputDirectory, "starwars.json"), JsonSerializer.Serialize(universes["starWars"], options));
+            File.WriteAllText(Path.Combine(outputDirectory, "hitchhiker.json"), JsonSerializer.Serialize(universes["hitchHiker"], options));
+            File.WriteAllText(Path.Combine(outputDirectory, "rings.json"), JsonSerializer.Serialize(universes["rings"], options));
+            File.WriteAllText(Path.Combine(outputDirectory, "marvel.json"), JsonSerializer.Serialize(universes["marvel"], options));
 
         }
     }
