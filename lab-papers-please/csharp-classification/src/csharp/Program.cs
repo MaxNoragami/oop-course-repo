@@ -10,7 +10,7 @@ namespace Csharp
         static void Main()
         {
             var input = new Input();
-            input.SetInputFile("test-input.json");
+            input.SetInputFile("input.json");
 
             string[] universeName = {"starWars", "hitchHiker", "rings", "marvel"};
             Dictionary<string, Universe> universes = new Dictionary<string, Universe>();
@@ -21,7 +21,7 @@ namespace Csharp
 
             Dictionary < Universe, Race[] > races = new Dictionary<Universe, Race[]>();
             races[universes["starWars"]] = new Race[] {
-                new Race("Wookie", false, "Kashyyk", 400, new List<string>{"HAIRY", "TALL"}),
+                new Race("Wookie", false, "Kashyyyk", 400, new List<string>{"HAIRY", "TALL"}),
                 new Race("Ewok", false, "Endor", 60, new List<string>{"SHORT", "HAIRY"}),
             };
             races[universes["marvel"]] = new Race[] {
@@ -43,7 +43,8 @@ namespace Csharp
                 {
                     Creature creature = new Creature();
                     creature.DataToCreature(entry);
-
+                    
+                    
                     // Console.WriteLine("Id:{0}  Human:{1}  Age:{2}  Planet:{3}  Traits:{4}", creature.Id, creature.IsHumanoid, creature.Age, creature.Planet, creature.Traits);
                     //Console.WriteLine(entry.ToString());
                     Dictionary<Universe, List<Race>> potentialOutput = new Dictionary<Universe, List<Race>>();
@@ -52,6 +53,7 @@ namespace Csharp
                     {
                         Universe currentUniverse = raceKeyValuePair.Key;
                         Race[] currentRaces = raceKeyValuePair.Value;
+                     
 
                         foreach(var race in currentRaces)
                         {
@@ -59,7 +61,16 @@ namespace Csharp
                             if (creature.IsHumanoid != null && (creature.IsHumanoid != race.IsHumanoid)) continue;
                             else if (creature.Planet != null && (creature.Planet != race.Planet)) continue;
                             else if (creature.Age != 0 && (creature.Age > race.Age)) continue;
-                            else if (creature.Traits != null && race.Traits != null && !creature.Traits.Intersect(race.Traits).Any()) continue;
+                            //else if (creature.Traits != null && race.Traits != null && !creature.Traits.Intersect(race.Traits).Any()) continue;
+                            else if (creature.Traits != null && creature.Traits.Any())
+                            {
+                                // If the race has no traits or any of the creature's traits are not in the race, skip it
+                                if (race.Traits == null || creature.Traits.Any(trait => !race.Traits.Contains(trait)))
+                                {
+                                    continue;
+                                }
+                            }
+
 
                             // Check if the universe already exists in potentialOutput
                             if (!potentialOutput.ContainsKey(currentUniverse))
@@ -71,11 +82,13 @@ namespace Csharp
                             {
                                 // If it exists, add the race to the existing list
                                 potentialOutput[currentUniverse].Add(race);
+                               
                             }
                         }
+
                     }
 
-                    if(potentialOutput.Count == 1)
+                    if(potentialOutput.Keys.Count == 1)
                     {
                         var universeKeyValuePair = potentialOutput.First();
                         Universe matchedUniverse = universeKeyValuePair.Key;
@@ -87,31 +100,7 @@ namespace Csharp
                             matchedUniverse.Individuals.Add(creature);
                         }
                     }
-                    /*string? userInput = Console.ReadLine();
-                    switch(userInput.Trim())
-                    {
-                        case "1":
-                        {
-                            universes["starWars"].Individuals.Add(creature);
-                            break;
-                        }
-                        case "2":
-                        {
-                            universes["hitchHiker"].Individuals.Add(creature);
-                            break;
-                        }
-                        case "3":
-                        {
-                            universes["rings"].Individuals.Add(creature);
-                            break;
-                        }
-                        case "4":
-                        {
-                            universes["marvel"].Individuals.Add(creature);
-                            break;
-                        }
-                    }
-                    */
+                    
                 }
             }
 
