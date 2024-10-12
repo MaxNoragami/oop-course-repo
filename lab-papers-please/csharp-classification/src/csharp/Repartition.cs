@@ -14,12 +14,15 @@ namespace Csharp
                 // We iterate through each entry of the JsonArray (the data array from the input file)
                 foreach (var entry in data)
                 {
-                    // We initiate a Creature object for each JsonObject from the JsonArray/data
-                    Creature creature = new Creature();
-                    creature.DataToCreature(entry);
+                    if(entry != null)
+                    {
+                        // We initiate a Creature object for each JsonObject from the JsonArray/data
+                        Creature creature = new Creature();
+                        creature.DataToCreature(entry);
 
-                    // We process the Creature info by sending it to the right Universe
-                    ProcessEntry(races, creature, universes);
+                        // We process the Creature info by sending it to the right Universe
+                        ProcessEntry(races, creature, universes);
+                    } 
                 }
             }
         }

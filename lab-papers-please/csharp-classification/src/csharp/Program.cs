@@ -19,7 +19,7 @@ namespace Csharp
                 universes[universe] = new Universe(universe, new List<Creature>());
 
             // Call the method in order to get the data that was deserialized from the input
-            var data = input.GetData();
+            JsonArray? data = input.GetData();
 
             // We set up a dictionary where we have as keys the Universes and as values an array of available Races in that universe
             Dictionary < Universe, Race[] > races = new Dictionary<Universe, Race[]>();
@@ -41,14 +41,18 @@ namespace Csharp
                 new Race("Dwarf", true, "Earth", 200, new List<string>{"SHORT", "BULKY"}),
             };
 
-            // We attribute each lost creature in the right universe it belongs to
-            new Repartition().ToUniverse(data, races, universes);
-            
-            // Serialize the results to the output files
-            Output.SetData(universeName, universes);
-
+            if(data != null)
+            {
+                // We attribute each lost creature in the right universe it belongs to
+                new Repartition().ToUniverse(data, races, universes);
+                
+                // Serialize the results to the output files
+                View.SetData(universeName, universes);
+            }
+            else
+            {
+                Console.WriteLine("ERROR: Failed to load the data, as it was 'null', check if the file exists in the 'Input' directory");
+            }
         }
     }
-
 }
-
