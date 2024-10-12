@@ -7,27 +7,24 @@ namespace Csharp
 {
     public class Input
     {
-        private static string? fileName;
+        public string FileName {get;set;} // The name of the file we get our input from
         private static string? inputFile;
 
-        public string BaseDir {get; set;}
+        private string baseDir = AppContext.BaseDirectory;
 
-         public void SetInputFile(string file)
-         {
-            fileName = file;
-         }
-
-         public JsonArray GetData()
-         {
-            inputFile = Path.Combine(BaseDir, "..", "..", "..", "..", "resources", "input", fileName);
+        // Method to deserialize the data from the input files
+        public JsonArray GetData()
+        {
+            inputFile = Path.Combine(baseDir, "..", "..", "..", "..", "resources", "input", FileName); // Path of the input file
             string? jsonData = File.ReadAllText(inputFile);
-            JsonArray? data = JsonNode.Parse(jsonData)?["data"]?.AsArray();
+            JsonArray? data = JsonNode.Parse(jsonData)?["data"]?.AsArray(); // We save the JSON objects into a JsonArray
             return data;
         }
 
-        public Input()
+        // Constructor for setting the name of the File
+        public Input(string? fileName)
         {
-            BaseDir = AppContext.BaseDirectory;
+            FileName = fileName;
         }       
 
     }

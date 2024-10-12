@@ -9,20 +9,22 @@ namespace Csharp
     {
         static void Main()
         {
-            var input = new Input();
-            input.SetInputFile("input.json");
+            // Here we initiate the 'Input' class setting up the name of the source file that has the input
+            var input = new Input("input.json");
 
-            // NON-CLASSABLE
+            // We define the available universes in an array and we generate Universe objects for each of them
             string[] universeName = {"starWars", "hitchHiker", "rings", "marvel"};
             Dictionary<string, Universe> universes = new Dictionary<string, Universe>();
             foreach(string universe in universeName) 
                 universes[universe] = new Universe(universe, new List<Creature>());
 
+            // Call the method in order to get the data that was deserialized from the input
             var data = input.GetData();
 
-
-            // NON-CLASSABLE
+            // We set up a dictionary where we have as keys the Universes and as values an array of available Races in that universe
             Dictionary < Universe, Race[] > races = new Dictionary<Universe, Race[]>();
+
+            // We initate the races that are available in each Universe
             races[universes["starWars"]] = new Race[] {
                 new Race("Wookie", false, "Kashyyyk", 400, new List<string>{"HAIRY", "TALL"}),
                 new Race("Ewok", false, "Endor", 60, new List<string>{"SHORT", "HAIRY"}),
@@ -39,9 +41,10 @@ namespace Csharp
                 new Race("Dwarf", true, "Earth", 200, new List<string>{"SHORT", "BULKY"}),
             };
 
-            // CLASSABLE
+            // We attribute each lost creature in the right universe it belongs to
             new Repartition().ToUniverse(data, races, universes);
             
+            // Serialize the results to the output files
             Output.SetData(universeName, universes);
 
         }
