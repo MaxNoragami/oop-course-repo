@@ -14,13 +14,30 @@ namespace Csharp
 
             string[] universeName = {"starWars", "hitchHiker", "rings", "marvel"};
             Dictionary<string, Universe> universes = new Dictionary<string, Universe>();
-            foreach(string universe in universeName) universes[universe] = new Universe(universe, new List<Creature>());
+            foreach(string universe in universeName) 
+                universes[universe] = new Universe(universe, new List<Creature>());
 
             var data = input.GetData();
 
+            Dictionary < Universe, Race[] > races =  new Dictionary<Universe, Race[]>();
+            races[universes["starWars"]] = new Race[] {
+                new Race("Wookie", false, "Kashyyk", 400, new List<string>{"HAIRY", "TALL"}),
+                new Race("Ewok", false, "Endor", 60, new List<string>{"SHORT", "HAIRY"}),
+            };
+            races[universes["marvel"]] = new Race[] {
+                new Race("Asgardian", true, "Asgard", 5000, new List<string>{"BLONDE", "TALL"}),
+            };
+            races[universes["hitchHiker"]] = new Race[] {
+                new Race("Betelgeusian", true, "Betelgeuse", 100, new List<string>{"EXTRA_ARMS", "EXTRA_HEAD"}),
+                new Race("Vogons", false, "Vogsphere", 200, new List<string>{"GREEN", "BULKY"}),
+            };
+            races[universes["rings"]] = new Race[] {
+                new Race("Elf", true, "Earth", -1, new List<string>{"BLONDE", "POINTY_EARS"}),
+                new Race("Dwarf", true, "Earth", 200, new List<string>{"SHORT", "BULKY"}),
+            };
 
 
-            if(data != null)
+            if (data != null)
             {
                 foreach(var entry in data)
                 {
