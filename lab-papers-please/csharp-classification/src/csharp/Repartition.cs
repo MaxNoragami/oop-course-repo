@@ -5,8 +5,8 @@ namespace Csharp
 {
     class Repartition
     {
-        
-        public void ToUniverse(JsonArray? data, Dictionary<Universe, Race[]> races)
+
+        public void ToUniverse(JsonArray? data, Dictionary<Universe, Race[]> races, Dictionary<string, Universe> universes)
         {
             if (data != null)
             {
@@ -15,15 +15,13 @@ namespace Csharp
                     Creature creature = new Creature();
                     creature.DataToCreature(entry);
 
-                    Dictionary<Universe, List<Race>> potentialOutput = new Dictionary<Universe, List<Race>>();
-
-                    MatchCreatureToUniverse(potentialOutput, creature);
+                    ProcessEntry(races, creature, universes);
 
                 }
             }
         }
 
-        private Dictionary<Universe, List<Race>> ProcessEntry(Dictionary<Universe, Race[]> races, Creature creature)
+        private void ProcessEntry(Dictionary<Universe, Race[]> races, Creature creature, Dictionary<string, Universe> universes)
         {
             var potentialOutput = new Dictionary<Universe, List<Race>>();
 
@@ -36,21 +34,17 @@ namespace Csharp
                 foreach (var race in currentRaces)
                 {
 
-                    
-                    if(IsRaceMatchCreature(creature, race))
+
+                    if (IsRaceMatchCreature(creature, race))
                     {
-                        // Check if the universe already exists in potentialOutput
-                        if (!potentialOutput.ContainsKey(currentUniverse))
-                            potentialOutput[currentUniverse] = new List<Race> { race };  // If it doesn't exist, add a new entry with a list containing the current race
-                        else
-                            potentialOutput[currentUniverse].Add(race); // If it exists, add the race to the existing list
+                        universes[currentUniverse.Name].Individuals.Add(creature);
                     }
-                    
+
 
                 }
 
             }
-            return potentialOutput;
+
         }
 
         private bool IsRaceMatchCreature(Creature creature, Race race)
@@ -62,22 +56,5 @@ namespace Csharp
 
             return true;
         }
-
-        private void MatchCreatureToUniverse(Dictionary<Universe, List<Race>> potentialOutput, Creature creature)
-        {
-            if (potentialOutput.Keys.Count == 1)
-            {
-                var universeKeyValuePair = potentialOutput.First();
-                Universe matchedUniverse = universeKeyValuePair.Key;
-                List<Race> matchedRaces = universeKeyValuePair.Value;
-
-                // Add the creature to the Individuals list of the matched universe
-                if (matchedRaces.Count == 1)
-                {
-                    matchedUniverse.Individuals.Add(creature);
-                }
-            }
-        }
-            
     }
 }

@@ -40,7 +40,7 @@ namespace Csharp
             };
 
             // CLASSABLE
-            new Repartition().ToUniverse(data, races);
+            new Repartition().ToUniverse(data, races, universes);
             
             var options = new JsonSerializerOptions
             {
