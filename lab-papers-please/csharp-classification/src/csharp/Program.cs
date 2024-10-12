@@ -42,20 +42,7 @@ namespace Csharp
             // CLASSABLE
             new Repartition().ToUniverse(data, races, universes);
             
-            var options = new JsonSerializerOptions
-            {
-                WriteIndented = true,
-                DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
-                PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-
-            };
-
-            string outputDirectory = Path.Combine(input.BaseDir, "..", "..", "..", "..", "resources", "output");
-          
-            File.WriteAllText(Path.Combine(outputDirectory, "starwars.json"), JsonSerializer.Serialize(universes["starWars"], options));
-            File.WriteAllText(Path.Combine(outputDirectory, "hitchhiker.json"), JsonSerializer.Serialize(universes["hitchHiker"], options));
-            File.WriteAllText(Path.Combine(outputDirectory, "rings.json"), JsonSerializer.Serialize(universes["rings"], options));
-            File.WriteAllText(Path.Combine(outputDirectory, "marvel.json"), JsonSerializer.Serialize(universes["marvel"], options));
+            Output.SetData(universeName, universes);
 
         }
     }
