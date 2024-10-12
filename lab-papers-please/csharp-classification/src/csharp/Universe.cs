@@ -20,7 +20,7 @@ namespace Csharp
     class Creature
     {
         public int Id {get; set;}
-        public bool IsHumanoid { get; set; }
+        public bool? IsHumanoid { get; set; }
         public string? Planet { get; set; }
 
         public int Age { get; set;}
@@ -31,7 +31,7 @@ namespace Csharp
             var options = new JsonSerializerOptions()
             {
                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-                // DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
+                DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
             };
 
             var deserializedCreature = JsonSerializer.Deserialize<Creature>(data.ToJsonString(), new JsonSerializerOptions(options));

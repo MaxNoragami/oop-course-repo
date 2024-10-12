@@ -19,7 +19,7 @@ namespace Csharp
 
             var data = input.GetData();
 
-            Dictionary < Universe, Race[] > races =  new Dictionary<Universe, Race[]>();
+            Dictionary < Universe, Race[] > races = new Dictionary<Universe, Race[]>();
             races[universes["starWars"]] = new Race[] {
                 new Race("Wookie", false, "Kashyyk", 400, new List<string>{"HAIRY", "TALL"}),
                 new Race("Ewok", false, "Endor", 60, new List<string>{"SHORT", "HAIRY"}),
@@ -32,7 +32,7 @@ namespace Csharp
                 new Race("Vogons", false, "Vogsphere", 200, new List<string>{"GREEN", "BULKY"}),
             };
             races[universes["rings"]] = new Race[] {
-                new Race("Elf", true, "Earth", -1, new List<string>{"BLONDE", "POINTY_EARS"}),
+                new Race("Elf", true, "Earth", int.MaxValue, new List<string>{"BLONDE", "POINTY_EARS"}),
                 new Race("Dwarf", true, "Earth", 200, new List<string>{"SHORT", "BULKY"}),
             };
 
@@ -43,10 +43,51 @@ namespace Csharp
                 {
                     Creature creature = new Creature();
                     creature.DataToCreature(entry);
-                    Console.WriteLine("Id:{0}  Human:{1}  Age:{2}  Planet:{3}  Traits:{4}", creature.Id, creature.IsHumanoid, creature.Age, creature.Planet, creature.Traits);
-                    
-                    Console.WriteLine(entry.ToString());
-                    string? userInput = Console.ReadLine();
+
+                    // Console.WriteLine("Id:{0}  Human:{1}  Age:{2}  Planet:{3}  Traits:{4}", creature.Id, creature.IsHumanoid, creature.Age, creature.Planet, creature.Traits);
+                    //Console.WriteLine(entry.ToString());
+                    Dictionary<Universe, List<Race>> potentialOutput = new Dictionary<Universe, List<Race>>();
+
+                    foreach(var raceKeyValuePair in races)
+                    {
+                        Universe currentUniverse = raceKeyValuePair.Key;
+                        Race[] currentRaces = raceKeyValuePair.Value;
+
+                        foreach(var race in currentRaces)
+                        {
+                            // Console.WriteLine("{0}:{1}",creature.Id,creature.IsHumanoid);
+                            if (creature.IsHumanoid != null && (creature.IsHumanoid != race.IsHumanoid)) continue;
+                            else if (creature.Planet != null && (creature.Planet != race.Planet)) continue;
+                            else if (creature.Age != 0 && (creature.Age > race.Age)) continue;
+                            else if (creature.Traits != null && race.Traits != null && !creature.Traits.Intersect(race.Traits).Any()) continue;
+
+                            // Check if the universe already exists in potentialOutput
+                            if (!potentialOutput.ContainsKey(currentUniverse))
+                            {
+                                // If it doesn't exist, add a new entry with a list containing the current race
+                                potentialOutput[currentUniverse] = new List<Race> { race };
+                            }
+                            else
+                            {
+                                // If it exists, add the race to the existing list
+                                potentialOutput[currentUniverse].Add(race);
+                            }
+                        }
+                    }
+
+                    if(potentialOutput.Count == 1)
+                    {
+                        var universeKeyValuePair = potentialOutput.First();
+                        Universe matchedUniverse = universeKeyValuePair.Key;
+                        List<Race> matchedRaces = universeKeyValuePair.Value;
+
+                        // Add the creature to the Individuals list of the matched universe
+                        if (matchedRaces.Count == 1)
+                        {
+                            matchedUniverse.Individuals.Add(creature);
+                        }
+                    }
+                    /*string? userInput = Console.ReadLine();
                     switch(userInput.Trim())
                     {
                         case "1":
@@ -70,6 +111,7 @@ namespace Csharp
                             break;
                         }
                     }
+                    */
                 }
             }
 
