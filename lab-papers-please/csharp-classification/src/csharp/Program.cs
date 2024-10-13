@@ -44,10 +44,11 @@ namespace Csharp
             if(data != null)
             {
                 // We attribute each lost creature in the right universe it belongs to
-                new Repartition().ToUniverse(data, races, universes);
+                Repartition.ToUniverse(data, races, universes);
                 
                 // Serialize the results to the output files
                 View.SetData(universeName, universes);
+                Console.WriteLine("Successfully sent the Creatures back to their Universes! :D");
             }
             else
             {

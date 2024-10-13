@@ -4,10 +4,10 @@ using System.Text.Json.Nodes;
 namespace Csharp
 {
     // Class that defines the logic of the repartion of each Creature to the Universe it belongs to
-    class Repartition
+    static class Repartition
     {
         // Main function that gets called for sorting the creatures into the right universes
-        public void ToUniverse(JsonArray? data, Dictionary<Universe, Race[]> races, Dictionary<string, Universe> universes)
+        static public void ToUniverse(JsonArray? data, Dictionary<Universe, Race[]> races, Dictionary<string, Universe> universes)
         {
             if (data != null)
             {
@@ -28,7 +28,7 @@ namespace Csharp
         }
 
         // We process the Creature info by sending it to the right Universe
-        private void ProcessEntry(Dictionary<Universe, Race[]> races, Creature creature, Dictionary<string, Universe> universes)
+        static private void ProcessEntry(Dictionary<Universe, Race[]> races, Creature creature, Dictionary<string, Universe> universes)
         {
             // We start iterating through each available race of each universe and checking if the creature belongs to it
             foreach (var raceKeyValuePair in races)
@@ -50,7 +50,7 @@ namespace Csharp
         }
 
         // Function to check if the current creature we are dealing with belongs to the current Race
-        private bool IsRaceMatchCreature(Creature creature, Race race)
+        static private bool IsRaceMatchCreature(Creature creature, Race race)
         {
             // If the creature doesnt match one of the race fields it will be checked against the following race
             if (creature.IsHumanoid != null && creature.IsHumanoid != race.IsHumanoid) return false;

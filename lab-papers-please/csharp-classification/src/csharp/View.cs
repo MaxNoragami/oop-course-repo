@@ -23,7 +23,7 @@ namespace Csharp
 
             // Dynamically serializing the data of each universe into the right json file
             foreach(var universe in universeName)
-                File.WriteAllText(Path.Combine(outputDirectory, universe + ".json"), JsonSerializer.Serialize(universes[universe], options));
+                File.WriteAllText(Path.Combine(outputDirectory, universe.ToLower() + ".json"), JsonSerializer.Serialize(universes[universe], options));
             
         }
         
